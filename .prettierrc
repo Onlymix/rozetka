@@ -1,0 +1,10 @@
+{
+    "trailingComma": "all",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 140,
+    "endOfLine": "auto",
+    "braceStyle": "1tbs",
+    "phpVersion": "7.4"
+}
