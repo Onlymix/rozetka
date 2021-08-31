@@ -1,16 +1,7 @@
 <template>
-    <q-layout view="hHh lpR fFf">
-        <q-header class="bg-primary text-white">
-            <q-toolbar>
-                <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
-
-                <q-toolbar-title>
-                    <q-avatar>
-                        <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
-                    </q-avatar>
-                    Title
-                </q-toolbar-title>
-            </q-toolbar>
+    <q-layout view="lhh Lpr lFf">
+        <q-header style="background-color: #221f1f; height: 72px">
+            <app-header v-model="leftDrawerOpen" />
         </q-header>
 
         <q-drawer v-model="leftDrawerOpen" side="left" bordered>
@@ -24,16 +15,14 @@
 </template>
 <script>
 import { ref } from 'vue'
+import AppHeader from './AppHeader'
 
 export default {
     name: 'Root',
+    components: { AppHeader },
     setup() {
-        const leftDrawerOpen = ref(true)
         return {
-            leftDrawerOpen,
-            toggleLeftDrawer() {
-                leftDrawerOpen.value = !leftDrawerOpen.value
-            },
+            leftDrawerOpen: ref(false),
         }
     },
 }
