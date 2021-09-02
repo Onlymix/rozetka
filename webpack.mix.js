@@ -1,4 +1,5 @@
 const mix = require('laravel-mix')
+const path = require('path')
 require('laravel-mix-eslint')
 /*
  |--------------------------------------------------------------------------
@@ -12,12 +13,13 @@ require('laravel-mix-eslint')
  */
 
 mix.js('resources/js/app.js', 'public/js/')
-    .vue({ version: 3, extractStyles: true, globalStyles: './resources/sass/global.scss' })
-    .sass('resources/sass/global.scss', 'public/css/sass.css')
+    .vue({ version: 3, extractStyles: true, globalStyles: { scss: 'resources/sass/vars.scss', stylus: 'resources/styl/vars.styl' } })
+    .sass('resources/sass/vars.scss', 'public/css/sass.css')
     .sass('node_modules/quasar/dist/quasar.sass', 'public/css/quasar.css')
     .stylus('resources/styl/import.styl', 'public/css/stylus.css')
     .styles(['public/css/sass.css', 'public/css/stylus.css'], 'public/css/app.css')
     .copyDirectory('resources/img', 'public/img')
+    .alias({ '@js': path.join(__dirname, 'resources/js'), '@': path.join(__dirname, 'resources') })
     .sourceMaps()
     .extract()
     .version()
