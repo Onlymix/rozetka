@@ -6,9 +6,11 @@
     "extends": [
         "plugin:vue/recommended",
         "plugin:prettier/recommended",
+        "plugin:vue-scoped-css/vue3-recommended",
         "@vue/prettier"
     ],
     "rules": {
+        "vue-scoped-css/no-unused-selector": 0,
         "vue/no-multiple-template-root": 0,
         "semi": [
             "error",
