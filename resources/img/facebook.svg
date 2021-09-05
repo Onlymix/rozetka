@@ -1,8 +1,0 @@
-<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <defs>
-        <symbol id="icon-facebook" viewBox="0 0 24 24">
-            <path id="svg_1" d="m15.6376,11.9807l-2.6695,0l0,10.0193l-4.04452,0l0,-10.0193l-1.92358,0l0,-3.52113l1.92358,0l0,-2.27859c0,-1.62945 0.75551,-4.18098 4.08052,-4.18098l2.9959,0.01284l0,3.41789l-2.1737,0c-0.3566,0 -0.8579,0.18251 -0.8579,0.9598l0,2.07232l3.0225,0l-0.3533,3.51785z"/>
-        </symbol>
-    </defs>
-    <use id="svg_2" fill="#FFFFFF" href="#icon-facebook"/>
-</svg>
