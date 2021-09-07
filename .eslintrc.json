@@ -12,6 +12,7 @@
     "rules": {
         "vue-scoped-css/no-unused-selector": 0,
         "vue/no-multiple-template-root": 0,
+        "vue/no-v-for-template-key": 0,
         "semi": [
             "error",
             "never"
