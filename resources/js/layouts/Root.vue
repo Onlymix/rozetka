@@ -4,22 +4,25 @@
             <app-header v-model="leftDrawerOpen" />
         </q-header>
 
-        <q-drawer v-model="leftDrawerOpen" side="left" bordered>
+        <q-drawer v-model="leftDrawerOpen" overlay side="left" bordered>
             <!-- drawer content -->
         </q-drawer>
 
         <q-page-container>
-            <!--            <router-view />-->
+            <app-content />
         </q-page-container>
     </q-layout>
+    <svg-package />
 </template>
 <script>
 import { ref } from 'vue'
 import AppHeader from './AppHeader'
+import AppContent from './AppContent'
+import SvgPackage from '../components/SvgPackage'
 
 export default {
     name: 'Root',
-    components: { AppHeader },
+    components: { SvgPackage, AppHeader, AppContent },
     setup() {
         return {
             leftDrawerOpen: ref(false),
@@ -27,8 +30,3 @@ export default {
     },
 }
 </script>
-<style>
-body {
-    background-color: rgb(26, 41, 79);
-}
-</style>
