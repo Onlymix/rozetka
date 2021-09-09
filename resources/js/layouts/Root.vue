@@ -4,7 +4,7 @@
             <app-header v-model="leftDrawerOpen" />
         </q-header>
 
-        <q-drawer v-model="leftDrawerOpen" overlay side="left" bordered>
+        <q-drawer v-model="leftDrawerOpen" behavior="mobile" no-swipe-backdrop overlay side="left" bordered>
             <!-- drawer content -->
         </q-drawer>
 

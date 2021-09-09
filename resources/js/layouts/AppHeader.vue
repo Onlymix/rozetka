@@ -1,9 +1,9 @@
 <template>
     <div class="header-wrapper row items-center q-gutter-x-lg full-height justify-center">
         <q-btn icon="menu" unelevated :ripple="false" size="lg" dense @click="sidebarIsOpened = !sidebarIsOpened" />
-        <img src="https://xl-static.rozetka.com.ua/assets/img/design/logo_n.svg" alt="Rozetka Logo" />
+        <a href="#" class="reset-line-height"><svg-icon icon-id="icon-logo-Main" w="240px" h="40px" /></a>
         <q-btn icon="widgets" label="Каталог" unelevated :ripple="false" no-caps style="background-color: hsla(0, 0%, 100%, 0.2)" />
-        <q-input v-model="search" style="width: 540px" outlined dense class="search" placeholder="Я ищу...">
+        <q-input v-model="search" outlined dense class="col-grow search" placeholder="Я ищу...">
             <template #prepend>
                 <q-icon name="search" />
             </template>
@@ -21,9 +21,11 @@
             <q-separator vertical color="grey-8" class="q-mx-xs" />
             <a href="#" :class="{ 'active-language': 'ua' === language }" @click="setLanguage" v-text="'ua'" />
         </div>
-        <q-btn unelevated :ripple="false" style="width: 80px" no-caps>
-            <span style="font-size: 11px">Попробуйте</span>
-            <img src="https://content1.rozetka.com.ua/sellers/logo/original/187423605.png" alt="premium" style="height: 27px" />
+        <q-btn dense unelevated :ripple="false" class="reset-line-height" no-caps padding="2px" size="10px">
+            <div>
+                <p class="q-my-xs">Попробуйте</p>
+                <svg-icon icon-id="icon-premium" w="66px" h="20px" />
+            </div>
         </q-btn>
 
         <q-btn icon="person" unelevated :ripple="false" size="lg" dense />
@@ -33,7 +35,9 @@
 
 <script>
 import { ref, computed } from 'vue'
+import SvgIcon from '../components/SvgIcon'
 export default {
+    components: { SvgIcon },
     props: {
         modelValue: Boolean,
     },
