@@ -169,7 +169,7 @@ export default {
 <style lang="stylus">
 main
     display grid
-    grid-template-columns 300px 1px minmax(700px, 1251px)
+    grid-template-columns 300px 1px minmax(741px, 1251px)
     justify-content center
     min-width min-content
     .content__button
