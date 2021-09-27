@@ -1,9 +1,9 @@
 <template>
-    <div class="header-wrapper row items-center q-gutter-x-lg full-height justify-center">
+    <div class="header-wrapper items-center full-height row q-gutter-x-md">
         <q-btn icon="menu" unelevated :ripple="false" size="lg" dense @click="sidebarIsOpened = !sidebarIsOpened" />
         <a href="#" class="reset-line-height"><svg-icon icon-id="icon-logo-Main" w="240px" h="40px" /></a>
         <q-btn icon="widgets" label="Каталог" unelevated :ripple="false" no-caps style="background-color: hsla(0, 0%, 100%, 0.2)" />
-        <q-input v-model="search" outlined dense class="col-grow search" placeholder="Я ищу...">
+        <q-input v-model="search" outlined dense class="search col-grow" placeholder="Я ищу...">
             <template #prepend>
                 <q-icon name="search" />
             </template>
@@ -27,7 +27,6 @@
                 <svg-icon icon-id="icon-premium" w="66px" h="20px" />
             </div>
         </q-btn>
-
         <q-btn icon="person" unelevated :ripple="false" size="lg" dense />
         <q-btn icon="shopping_cart" unelevated :ripple="false" size="lg" dense style="margin-left: 0" />
     </div>
@@ -62,11 +61,9 @@ export default {
 
 <style lang="scss">
 .header-wrapper {
-    // TODO: insert media
-    min-width: 1400px;
+    min-width: 1001px;
     max-width: 1600px;
-    margin: 0 auto;
-
+    background-color: inherit;
     .search {
         .q-field__control {
             background-color: #fff;

@@ -1,6 +1,6 @@
 <template>
     <q-layout view="lhh Lpr lFf">
-        <q-header style="background-color: #221f1f; height: 72px">
+        <q-header class="bg-grey-10">
             <app-header v-model="leftDrawerOpen" />
         </q-header>
 

@@ -1,5 +1,5 @@
 <template>
-    <aside style="width: 300px">
+    <aside>
         <q-list class="text-blue-8 q-mt-lg">
             <q-item v-for="item in menuLinks" :key="item.id" clickable manual-focus :to="item.url" dense>
                 <q-item-section avatar class="col-shrink no-padding">
@@ -251,7 +251,7 @@ export default {
     font-size 1em
     &:hover .q-item__section--main
         text-decoration underline
-        color $app-selected-orange
+        color $app__text-hover
 .apps img
     height 32px
 .copyright
