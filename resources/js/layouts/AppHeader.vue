@@ -1,9 +1,9 @@
 <template>
-    <div class="header-wrapper row items-center q-gutter-x-lg full-height justify-center">
+    <div class="header-wrapper items-center full-height row q-gutter-x-md">
         <q-btn icon="menu" unelevated :ripple="false" size="lg" dense @click="sidebarIsOpened = !sidebarIsOpened" />
         <img src="https://xl-static.rozetka.com.ua/assets/img/design/logo_n.svg" alt="Rozetka Logo" />
         <q-btn icon="widgets" label="Каталог" unelevated :ripple="false" no-caps style="background-color: hsla(0, 0%, 100%, 0.2)" />
-        <q-input v-model="search" style="width: 540px" outlined dense class="search" placeholder="Я ищу...">
+        <q-input v-model="search" outlined dense class="search col-grow" placeholder="Я ищу...">
             <template #prepend>
                 <q-icon name="search" />
             </template>
@@ -25,7 +25,6 @@
             <span style="font-size: 11px">Попробуйте</span>
             <img src="https://content1.rozetka.com.ua/sellers/logo/original/187423605.png" alt="premium" style="height: 27px" />
         </q-btn>
-
         <q-btn icon="person" unelevated :ripple="false" size="lg" dense />
         <q-btn icon="shopping_cart" unelevated :ripple="false" size="lg" dense style="margin-left: 0" />
     </div>
@@ -58,11 +57,9 @@ export default {
 
 <style lang="scss">
 .header-wrapper {
-    // TODO: insert media
-    min-width: 1400px;
+    min-width: 1001px;
     max-width: 1600px;
-    margin: 0 auto;
-
+    background-color: inherit;
     .search {
         .q-field__control {
             background-color: #fff;
