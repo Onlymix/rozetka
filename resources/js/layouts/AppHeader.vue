@@ -1,5 +1,5 @@
 <template>
-    <div class="header-wrapper items-center full-height row q-gutter-x-md">
+    <div class="header-wrapper items-center row q-gutter-x-md q-mx-auto">
         <q-btn icon="menu" unelevated :ripple="false" size="lg" dense @click="sidebarIsOpened = !sidebarIsOpened" />
         <a href="#" class="reset-line-height"><svg-icon icon-id="icon-logo-Main" w="240px" h="40px" /></a>
         <q-btn icon="widgets" label="Каталог" unelevated :ripple="false" no-caps style="background-color: hsla(0, 0%, 100%, 0.2)" />
@@ -61,7 +61,8 @@ export default {
 
 <style lang="scss">
 .header-wrapper {
-    min-width: 1001px;
+    height: 72px;
+    min-width: 1090px;
     max-width: 1600px;
     background-color: inherit;
     .search {
