@@ -19,15 +19,11 @@
                 <q-carousel-slide :name="2" img-src="/img/slider2.jpg" class="cursor-pointer" @click="openPageURL('#')" />
                 <q-carousel-slide :name="3" img-src="/img/slider3.jpg" class="cursor-pointer" @click="openPageURL('#')" />
             </q-carousel>
-            <q-btn
-                label="Все акции"
-                unelevated
-                no-caps
-                :ripple="false"
-                class="content__button q-btn-no-hover-bg self-end"
-                padding="xs xl"
-            />
-            <p class="text-h6">
+            <q-btn unelevated no-caps :ripple="false" class="content__button q-btn-no-hover-bg self-end" padding="xs xl">
+                <span>Все акции </span>
+                <span class="q-pl-xs text-grey-6" v-text="promotionsCount" />
+            </q-btn>
+            <p class="text-h6 q-mt-md">
                 Товары
                 <q-btn label="Add product (test button)" dense unelevated outline @click="isAddDialogOpened = !isAddDialogOpened" />
             </p>
@@ -177,7 +173,7 @@ main
         border 1px solid #e0e0e0
         border-top none
         color $app__text-primary
-        :hover
+        &:hover
             color $app__text-hover
     .no-left-border
         border-left-width 0 !important

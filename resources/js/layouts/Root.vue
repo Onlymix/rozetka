@@ -6,6 +6,7 @@
 
         <q-drawer v-model="leftDrawerOpen" behavior="mobile" no-swipe-backdrop overlay side="left" bordered>
             <!-- drawer content -->
+            <sidebar />
         </q-drawer>
 
         <q-page-container>
@@ -19,12 +20,13 @@ import { ref, onMounted, inject } from 'vue'
 import AppHeader from './AppHeader'
 import AppContent from './AppContent'
 import SvgPackage from '../components/SvgPackage'
+import Sidebar from './Sidebar'
 import { logout, refreshToken, setLoginState, setSavedUserData } from '../global'
 import { useCookies } from '@vueuse/integrations/useCookies'
 
 export default {
     name: 'Root',
-    components: { SvgPackage, AppHeader, AppContent },
+    components: { Sidebar, SvgPackage, AppHeader, AppContent },
     setup() {
         const user = inject('user')
         const jwt = useCookies().get('JWT')

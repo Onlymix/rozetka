@@ -1,13 +1,7 @@
 <template>
-
+    <span>temporary empty</span>
 </template>
 
 <script>
-export default {
-    name: 'sidebar'
-}
+export default {}
 </script>
-
-<style scoped>
-
-</style>

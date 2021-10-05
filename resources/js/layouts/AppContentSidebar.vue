@@ -39,7 +39,7 @@
         </div>
 
         <q-separator color="grey-12" />
-        <div class="apps row q-gutter-md sidebar-padding">
+        <div class="apps row q-gutter-md sidebar-padding justify-center">
             <span class="text-grey-6 col-12">Устанавливайте наши приложения</span>
             <a href="#"><svg-icon icon-id="icon-apps-GooglePlay" w="96px" h="32px" /></a>
             <a href="#"><svg-icon icon-id="icon-apps-AppStore" w="96px" h="32px" /></a>
@@ -183,21 +183,22 @@ import axios from 'axios'
 export default {
     components: { SvgIcon },
     setup() {
-        // const $axios = inject('$axios')
-        const user = inject('user')
-        const authForm = reactive({
-            isLogin: true,
-            login: '',
-            password: '',
-            email: '',
-        })
-        const result = ref(null)
+        const user = inject('user'),
+            result = ref(null),
+            isAuthDialogOpened = ref(false),
+            authForm = reactive({
+                isLogin: true,
+                login: '',
+                password: '',
+                email: '',
+            })
         function onSubmit() {
             const url = authForm.isLogin ? '/api/auth/login' : '/api/auth/register'
             axios.post(url, { name: authForm.login, password: authForm.password, email: authForm.email }).then((response) => {
                 setUserData(response.data.userData)
                 setLoginState(response.data.access_token)
                 setToken(response.data.access_token, response.data.expires_in)
+                setTimeout(() => (isAuthDialogOpened.value = false), 100)
             })
         }
         function onLogout() {
@@ -308,9 +309,9 @@ export default {
             supportLinks,
             authForm,
             result,
+            isAuthDialogOpened,
             onSubmit,
             onLogout,
-            isAuthDialogOpened: ref(false),
             masterCard: ref(false),
             visa: ref(false),
         }
