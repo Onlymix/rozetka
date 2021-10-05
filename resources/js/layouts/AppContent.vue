@@ -121,7 +121,7 @@ export default {
         const productList = ref([
             {
                 title: 'Отладочная плата Arduino Nano',
-                logoURL: 'https://content1.rozetka.com.ua/goods/images/preview/203825010.jpg',
+                logoURL: '/img/product1.jpg',
                 price: 202,
                 favorite: true,
                 endings: true,

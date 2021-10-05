@@ -54,15 +54,6 @@ class AuthController extends Controller {
     }
 
     /**
-     * Get the authenticated User
-     *
-     * @return JsonResponse
-     */
-    public function me() {
-        return response()->json($this->guard()->user());
-    }
-
-    /**
      * Log the user out (Invalidate the token)
      *
      * @return JsonResponse
@@ -97,6 +88,7 @@ class AuthController extends Controller {
                 $this->guard()
                     ->factory()
                     ->getTTL() * 60,
+            'userData' => $this->guard()->user(),
         ]);
     }
 

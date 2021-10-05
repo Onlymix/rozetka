@@ -13,6 +13,7 @@
         "@prettier/plugin-php": "^0.17.4",
         "@vue/compiler-sfc": "^3.2.7",
         "@vue/eslint-config-prettier": "^6.0.0",
+        "@vueuse/integrations": "^6.5.3",
         "axios": "^0.21",
         "browser-sync": "^2.27",
         "browser-sync-webpack-plugin": "^2.3.0",

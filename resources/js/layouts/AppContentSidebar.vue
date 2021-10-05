@@ -3,24 +3,41 @@
         <q-list class="text-blue-8 q-mt-lg">
             <q-item v-for="item in menuLinks" :key="item.id" clickable manual-focus :to="item.url" dense>
                 <q-item-section avatar class="col-shrink no-padding">
-                    <q-icon :name="item.icon" color="grey-13" class="q-px-xs" />
+                    <q-icon :name="item.icon" color="grey-13" />
                 </q-item-section>
-                <q-item-section v-text="item.text" />
+                <q-item-section class="q-pl-sm" v-text="item.text" />
             </q-item>
             <q-separator color="grey-12" class="q-mt-lg" />
             <q-item clickable manual-focus>
                 <q-item-section avatar class="col-shrink no-padding">
-                    <q-icon name="help_outline" color="grey-13" class="q-px-xs" />
+                    <q-icon name="help_outline" color="grey-13" />
                 </q-item-section>
-                <q-item-section style="text-decoration: none" v-text="'Справочный центр'" />
+                <q-item-section class="q-pl-sm" style="text-decoration: none" v-text="'Справочный центр'" />
             </q-item>
         </q-list>
         <q-separator color="grey-12" />
-        <div class="bg-grey-11 text-center sidebar-padding">
+        <q-list v-if="user.isLoggedIn">
+            <q-item-label header class="q-pb-none q-pl-none text-grey-6">
+                <q-icon name="person" color="grey-13" class="q-pr-xs" />
+                {{ user.login }}
+            </q-item-label>
+            <q-item clickable manual-focus dense class="text-blue-8" style="padding-left: 32px" @click="onLogout">
+                <q-item-section v-text="'Выход'" />
+            </q-item>
+        </q-list>
+        <div v-else class="bg-grey-11 text-center sidebar-padding">
             <div class="text-h6 text-weight-thin">Добро пожаловать!</div>
             <div style="font-size: 0.8em" class="q-my-sm">Войдите, чтобы получать рекомендации, персональные бонусы и скидки.</div>
-            <q-btn label="Войдите в личный кабинет" no-caps text-color="white" style="background: #3e77aa" unelevated />
+            <q-btn
+                label="Войдите в личный кабинет"
+                no-caps
+                text-color="white"
+                style="background: #3e77aa"
+                unelevated
+                @click="isAuthDialogOpened = !isAuthDialogOpened"
+            />
         </div>
+
         <q-separator color="grey-12" />
         <div class="apps row q-gutter-md sidebar-padding">
             <span class="text-grey-6 col-12">Устанавливайте наши приложения</span>
@@ -130,16 +147,62 @@
                 <q-card-section> Для активации услуги Verified by Visa для Вашей карты необходимо обратиться в Ваш банк. </q-card-section>
             </q-card>
         </q-dialog>
+        <q-dialog v-model="isAuthDialogOpened">
+            <q-card style="min-width: 640px">
+                <q-card-section class="row items-center q-pb-none">
+                    <div class="text-h6" v-text="authForm.isLogin ? 'Login' : 'Register'" />
+                    <q-space />
+                    <q-btn v-close-popup icon="close" flat round dense />
+                </q-card-section>
+                <q-card-section>
+                    <q-form class="q-gutter-md" @submit="onSubmit">
+                        <q-input v-if="!authForm.isLogin" v-model="authForm.login" filled label="Login" />
+                        <q-input v-model="authForm.email" filled type="email" label="Email" />
+                        <q-input v-model="authForm.password" filled type="password" label="Password" />
+                        <div class="row q-gutter-x-md justify-end">
+                            <q-btn
+                                :label="authForm.isLogin ? 'Register' : 'Login'"
+                                color="primary"
+                                @click="authForm.isLogin = !authForm.isLogin"
+                            />
+                            <q-btn label="Submit" type="submit" color="primary" />
+                        </div>
+                    </q-form>
+                </q-card-section>
+            </q-card>
+        </q-dialog>
     </aside>
 </template>
 
 <script>
 import SvgIcon from '../components/SvgIcon'
-import { ref } from 'vue'
+import { inject, reactive, ref } from 'vue'
+import { logout, setLoginState, setToken, setUserData } from '../global'
+import axios from 'axios'
 
 export default {
     components: { SvgIcon },
     setup() {
+        // const $axios = inject('$axios')
+        const user = inject('user')
+        const authForm = reactive({
+            isLogin: true,
+            login: '',
+            password: '',
+            email: '',
+        })
+        const result = ref(null)
+        function onSubmit() {
+            const url = authForm.isLogin ? '/api/auth/login' : '/api/auth/register'
+            axios.post(url, { name: authForm.login, password: authForm.password, email: authForm.email }).then((response) => {
+                setUserData(response.data.userData)
+                setLoginState(response.data.access_token)
+                setToken(response.data.access_token, response.data.expires_in)
+            })
+        }
+        function onLogout() {
+            logout()
+        }
         const supportLinks = [
             {
                 label: 'Помощь',
@@ -238,7 +301,19 @@ export default {
                 style: 'background-color: #08c',
             },
         ]
-        return { menuLinks, socialLinks, supportLinks, masterCard: ref(false), visa: ref(false) }
+        return {
+            user,
+            menuLinks,
+            socialLinks,
+            supportLinks,
+            authForm,
+            result,
+            onSubmit,
+            onLogout,
+            isAuthDialogOpened: ref(false),
+            masterCard: ref(false),
+            visa: ref(false),
+        }
     },
 }
 </script>
@@ -247,7 +322,7 @@ export default {
 .sidebar-padding
     padding 16px 24px 16px 24px
 .q-item
-    padding 2px 24px 2px 24px
+    padding 2px 24px 2px 0
     font-size 1em
     &:hover .q-item__section--main
         text-decoration underline
