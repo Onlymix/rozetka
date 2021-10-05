@@ -2,7 +2,6 @@
     <div class="q-pa-md relative-position borders column">
         <q-btn
             unelevated
-            dense
             :icon="isFavorite ? 'favorite' : 'favorite_border'"
             text-color="amber-8"
             :ripple="false"
@@ -18,10 +17,14 @@
             </div>
             <div class="title__hover" style="font-size: 1.05em" v-text="title" />
         </a>
-        <div class="q-mt-auto">
-            <span class="q-pr-xs" style="font-size: 1.8em" v-text="price" />
+        <div v-if="discountFrom" class="q-mt-auto text-strike text-grey-6">
+            <span class="q-pr-xs" style="font-size: 1.15em" v-text="discountFrom + ' ₴'" />
+        </div>
+        <div :class="{ 'text-red': discountFrom, 'q-mt-auto': !discountFrom }">
+            <span class="q-pr-xs" style="font-size: 1.85em" v-text="price" />
             <span class="" style="font-size: 1.35em" v-text="'₴'" />
         </div>
+        <span v-if="endings" class="text-red" style="font-size: 0.8em" v-text="'Заканчивается'" />
     </div>
 </template>
 
