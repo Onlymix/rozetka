@@ -4,33 +4,39 @@
         <q-separator vertical color="grey-12" />
         <section class="q-mt-lg q-ml-lg column">
             <q-carousel
-                v-model="slide"
+                v-model="slideID"
                 class="full-width"
                 animated
                 infinite
                 :autoplay="autoplay"
                 arrows
+                control-color="primary"
                 transition-prev="slide-right"
                 transition-next="slide-left"
                 @mouseenter="autoplay = false"
                 @mouseleave="autoplay = true"
             >
-                <q-carousel-slide :name="1" img-src="/img/slider1.jpg" class="cursor-pointer" @click="openPageURL('#')" />
-                <q-carousel-slide :name="2" img-src="/img/slider2.jpg" class="cursor-pointer" @click="openPageURL('#')" />
-                <q-carousel-slide :name="3" img-src="/img/slider3.jpg" class="cursor-pointer" @click="openPageURL('#')" />
+                <q-carousel-slide
+                    v-for="item in slides"
+                    :key="item.id"
+                    :name="item.id"
+                    :img-src="`/img/slider/${locale}/${item.id}.jpg`"
+                    class="cursor-pointer"
+                    @click="openPageURL(item.url)"
+                />
             </q-carousel>
             <q-btn unelevated no-caps :ripple="false" class="content__button q-btn-no-hover-bg self-end" padding="xs xl">
-                <span>Все акции </span>
+                <span class="q-mr-xs">{{ t('totalPromotions') }} </span>
                 <span class="q-pl-xs text-grey-6" v-text="promotionsCount" />
             </q-btn>
             <p class="text-h6 q-mt-md">
-                Товары
+                {{ t('goodsCategory') }}
                 <q-btn label="Add product (test button)" dense unelevated outline @click="isAddDialogOpened = !isAddDialogOpened" />
             </p>
             <div class="flex wrap content-start">
                 <product
                     v-for="(product, index) in displayedProductList"
-                    :key="product.title"
+                    :key="index"
                     v-bind="product"
                     :last="index === displayedProductList.length - 1"
                     :style="{ width: productWidth }"
@@ -57,7 +63,8 @@
 
             <q-card-section>
                 <q-form class="q-gutter-md" style="min-width: 300px" @submit="onProductAdd">
-                    <q-input v-model="form.title" outlined label="title" />
+                    <q-input v-model="form.titleRU" outlined label="title ru" />
+                    <q-input v-model="form.titleUA" outlined label="title ua" />
                     <q-input v-model="form.logoURL" outlined label="logo url" />
                     <q-input v-model.number="form.price" type="number" outlined label="price" />
                     <q-input
@@ -98,25 +105,43 @@
 import AppContentSidebar from './AppContentSidebar'
 import { ref, computed, reactive } from 'vue'
 import Product from '../components/Product'
+import { useI18n } from 'vue-i18n'
 export default {
     name: 'AppContent',
     components: { Product, AppContentSidebar },
     setup() {
         const form = reactive({
-            title: '',
+            titleRU: '',
+            titleUA: '',
             logoURL: '',
             price: 0,
             favorite: false,
             endings: false,
             discountFrom: 0,
         })
-        const slide = ref(1),
-            autoplay = ref(true),
+        const autoplay = ref(true),
             isAddDialogOpened = ref(false),
-            productMaxColumns = ref(null)
+            productMaxColumns = ref(null),
+            { t, locale } = useI18n(),
+            slides = [
+                {
+                    id: 0,
+                    url: '#',
+                },
+                {
+                    id: 1,
+                    url: '#',
+                },
+                {
+                    id: 2,
+                    url: '#',
+                },
+            ],
+            slideID = ref(slides[0].id)
         const productList = ref([
             {
-                title: 'Отладочная плата Arduino Nano',
+                titleRU: 'Отладочная плата Arduino Nano',
+                titleUA: 'Відладочна плата Arduino Nano',
                 logoURL: '/img/product1.jpg',
                 price: 202,
                 favorite: true,
@@ -134,14 +159,7 @@ export default {
             window.open(page, '_self')
         }
         function onProductAdd() {
-            productList.value.push({
-                title: form.title,
-                logoURL: form.logoURL,
-                price: form.price,
-                favorite: form.favorite,
-                discountFrom: form.discountFrom,
-                endings: form.endings,
-            })
+            productList.value.push(form)
         }
         return {
             promotionsCount: 894,
@@ -154,9 +172,12 @@ export default {
             productList,
             productWidth,
             form,
-            slide,
+            slideID,
+            slides,
+            locale,
             autoplay,
             isAddDialogOpened,
+            t,
         }
     },
 }
@@ -178,3 +199,11 @@ main
     .no-left-border
         border-left-width 0 !important
 </style>
+<i18n lang="yaml">
+ru:
+    goodsCategory: 'Товары'
+    totalPromotions: 'Все акции'
+ua:
+    goodsCategory: 'Товари'
+    totalPromotions: 'Всі акції'
+</i18n>

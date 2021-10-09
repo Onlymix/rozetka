@@ -11,6 +11,7 @@
         "clean": "rimraf public/css public/img public/js public/mix-manifest.json"
     },
     "devDependencies": {
+        "@intlify/vue-i18n-loader": "^3.2.0",
         "@prettier/plugin-php": "^0.17.4",
         "@vue/compiler-sfc": "^3.2.7",
         "@vue/eslint-config-prettier": "^6.0.0",
@@ -37,6 +38,7 @@
         "stylus": "^0.54.8",
         "stylus-loader": "^6.1.0",
         "vue": "^3.2.0",
+        "vue-i18n": "^9.2.0-beta.11",
         "vue-loader": "^16.5.0",
         "webpack": "^5"
     },

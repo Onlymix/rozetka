@@ -15,7 +15,7 @@
             <div class="items-center justify-center flex" style="height: 170px">
                 <img :src="logoURL" alt="logo" class="logo" />
             </div>
-            <div class="title__hover" style="font-size: 1.05em" v-text="title" />
+            <div class="title__hover" style="font-size: 1.05em" v-text="t('title')" />
         </a>
         <div v-if="discountFrom" class="q-mt-auto text-strike text-grey-6">
             <span class="q-pr-xs" style="font-size: 1.15em" v-text="discountFrom + ' ₴'" />
@@ -24,16 +24,18 @@
             <span class="q-pr-xs" style="font-size: 1.85em" v-text="price" />
             <span class="" style="font-size: 1.35em" v-text="'₴'" />
         </div>
-        <span v-if="endings" class="text-red" style="font-size: 0.8em" v-text="'Заканчивается'" />
+        <span v-if="endings" class="text-red" style="font-size: 0.8em" v-text="t('ending')" />
     </div>
 </template>
 
 <script>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
     props: {
-        title: { type: String, required: true },
+        titleRU: { type: String, required: true },
+        titleUA: { type: String, required: true },
         logoURL: { type: String, required: true },
         discountFrom: { type: Number, required: false, default: 0 },
         price: { type: Number, required: true },
@@ -42,7 +44,17 @@ export default {
         last: { type: Boolean, required: false },
     },
     setup(props) {
-        return { isFavorite: ref(props.favorite) }
+        const { t } = useI18n({
+            messages: {
+                ru: {
+                    title: props.titleRU,
+                },
+                ua: {
+                    title: props.titleUA,
+                },
+            },
+        })
+        return { t, isFavorite: ref(props.favorite) }
     },
 }
 </script>
@@ -60,3 +72,13 @@ export default {
     max-width 140px
     max-height 140px
 </style>
+<i18n>
+{
+    "ru": {
+        "ending": "Заканчивается"
+    },
+    "ua": {
+        "ending": "Закінчується"
+    }
+}
+</i18n>

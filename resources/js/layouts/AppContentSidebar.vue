@@ -5,14 +5,14 @@
                 <q-item-section avatar class="col-shrink no-padding">
                     <q-icon :name="item.icon" color="grey-13" />
                 </q-item-section>
-                <q-item-section class="q-pl-sm" v-text="item.text" />
+                <q-item-section class="q-pl-sm" v-text="t(`mainMenu.${item.i18}`)" />
             </q-item>
             <q-separator color="grey-12" class="q-mt-lg" />
             <q-item clickable manual-focus>
                 <q-item-section avatar class="col-shrink no-padding">
                     <q-icon name="help_outline" color="grey-13" />
                 </q-item-section>
-                <q-item-section class="q-pl-sm" style="text-decoration: none" v-text="'Справочный центр'" />
+                <q-item-section class="q-pl-sm" style="text-decoration: none" v-text="t('mainMenu.help')" />
             </q-item>
         </q-list>
         <q-separator color="grey-12" />
@@ -22,14 +22,14 @@
                 {{ user.login }}
             </q-item-label>
             <q-item clickable manual-focus dense class="text-blue-8" style="padding-left: 32px" @click="onLogout">
-                <q-item-section v-text="'Выход'" />
+                <q-item-section v-text="t('user.logout')" />
             </q-item>
         </q-list>
         <div v-else class="bg-grey-11 text-center sidebar-padding">
-            <div class="text-h6 text-weight-thin">Добро пожаловать!</div>
-            <div style="font-size: 0.8em" class="q-my-sm">Войдите, чтобы получать рекомендации, персональные бонусы и скидки.</div>
+            <div class="text-h6 text-weight-thin" v-text="t('user.welcome')" />
+            <div style="font-size: 0.8em" class="q-my-sm" v-text="t('user.description')" />
             <q-btn
-                label="Войдите в личный кабинет"
+                :label="t('user.button')"
                 no-caps
                 text-color="white"
                 style="background: #3e77aa"
@@ -40,13 +40,13 @@
 
         <q-separator color="grey-12" />
         <div class="apps row q-gutter-md sidebar-padding justify-center">
-            <span class="text-grey-6 col-12">Устанавливайте наши приложения</span>
+            <span class="text-grey-6 col-12">{{ t('apps') }}</span>
             <a href="#"><svg-icon icon-id="icon-apps-GooglePlay" w="96px" h="32px" /></a>
             <a href="#"><svg-icon icon-id="icon-apps-AppStore" w="96px" h="32px" /></a>
         </div>
         <q-separator color="grey-12" />
         <div class="sidebar-padding row q-gutter-sm items-center">
-            <div class="text-grey-6 col-12">Мы в социальных сетях</div>
+            <div class="text-grey-6 col-12" v-text="t('socialLinks')" />
             <q-btn
                 v-for="item in socialLinks"
                 :key="item.iconId"
@@ -63,7 +63,7 @@
         <q-separator color="grey-12" />
         <q-list class="text-blue-8 q-pb-md" dense>
             <template v-for="item in supportLinks" :key="item.label">
-                <q-item-label header class="q-px-lg q-pt-lg q-pb-sm text-subtitle2" v-text="item.label" />
+                <q-item-label header class="q-px-lg q-pt-lg q-pb-sm text-subtitle2" v-text="t(`socialMenu.${item.label}`)" />
                 <q-item
                     v-for="button in item.data"
                     :key="button.text"
@@ -73,20 +73,23 @@
                     manual-focus
                     :to="button.url"
                 >
-                    <q-item-section v-text="button.text" />
+                    <q-item-section v-text="t(`socialMenu.${button.i18}`)" />
                 </q-item>
             </template>
         </q-list>
         <q-separator color="grey-12" />
-        <div class="flex copyright sidebar-padding q-gutter-y-sm q-gutter-x-md justify-center">
-            <q-btn unelevated class="no-padding" :ripple="false" @click="masterCard = !masterCard">
-                <svg-icon icon-id="icon-payments-MasterCard" w="72px" h="32px" />
-            </q-btn>
-            <q-btn unelevated class="no-padding" :ripple="false" @click="visa = !visa">
-                <svg-icon icon-id="icon-payments-Visa" w="72px" h="32px" />
-            </q-btn>
-            <span class="text-grey-6">ТМ используется на основании лицензии правообладателя RozetkaLTD.</span>
-            <span>© Интернет-магазин «Розетка™» 2001–2021</span>
+        <div class="copyright sidebar-padding q-gutter-y-sm justify-center">
+            <div class="text-center q-gutter-x-md">
+                <q-btn unelevated class="no-padding" :ripple="false" @click="masterCard = !masterCard">
+                    <svg-icon icon-id="icon-payments-MasterCard" w="72px" h="32px" />
+                </q-btn>
+                <q-btn unelevated class="no-padding" :ripple="false" @click="visa = !visa">
+                    <svg-icon icon-id="icon-payments-Visa" w="72px" h="32px" />
+                </q-btn>
+            </div>
+            <p class="text-grey-6" v-text="t('footer.license')" />
+            <span v-text="t('footer.copyright')" /><br />
+            <span>2001–2021</span>
         </div>
         <q-dialog v-model="masterCard">
             <q-card style="min-width: 640px">
@@ -179,6 +182,7 @@ import SvgIcon from '../components/SvgIcon'
 import { inject, reactive, ref } from 'vue'
 import { logout, setLoginState, setToken, setUserData } from '../global'
 import axios from 'axios'
+import { useI18n } from 'vue-i18n'
 
 export default {
     components: { SvgIcon },
@@ -191,7 +195,8 @@ export default {
                 login: '',
                 password: '',
                 email: '',
-            })
+            }),
+            { t } = useI18n()
         function onSubmit() {
             const url = authForm.isLogin ? '/api/auth/login' : '/api/auth/register'
             axios.post(url, { name: authForm.login, password: authForm.password, email: authForm.email }).then((response) => {
@@ -206,41 +211,41 @@ export default {
         }
         const supportLinks = [
             {
-                label: 'Помощь',
+                label: 'help',
                 data: [
-                    { text: 'Доставка и оплата', url: '#' },
-                    { text: 'Кредит', url: '#' },
-                    { text: 'Гарантия', url: '#' },
-                    { text: 'Возврат товара', url: '#' },
-                    { text: 'Сервисные центры', url: '#' },
-                    { text: 'Отследить заказ', url: '#' },
+                    { i18: 'delivery', url: '#' },
+                    { i18: 'credit', url: '#' },
+                    { i18: 'warranty', url: '#' },
+                    { i18: 'return', url: '#' },
+                    { i18: 'serviceCenter', url: '#' },
+                    { i18: 'trackOrder', url: '#' },
                 ],
             },
             {
-                label: 'Информация о компании',
+                label: 'info',
                 data: [
-                    { text: 'О нас', url: '#' },
-                    { text: 'Условия использования сайта', url: '#' },
-                    { text: 'Вакансии', url: '#' },
-                    { text: 'Контакты', url: '#' },
+                    { i18: 'about', url: '#' },
+                    { i18: 'terms', url: '#' },
+                    { i18: 'jobs', url: '#' },
+                    { i18: 'contacts', url: '#' },
                 ],
             },
             {
-                label: 'Сервисы',
+                label: 'services',
                 data: [
-                    { text: 'Бонусный счет', url: '#' },
-                    { text: 'Rozetka Premium', url: '#' },
-                    { text: 'Подарочные сертификаты', url: '#' },
-                    { text: 'Rozetka Обмен', url: '#' },
-                    { text: 'Rozetka Travel', url: '#' },
+                    { i18: 'bonusAccount', url: '#' },
+                    { i18: 'premium', url: '#' },
+                    { i18: 'gifts', url: '#' },
+                    { i18: 'exchange', url: '#' },
+                    { i18: 'travel', url: '#' },
                 ],
             },
             {
-                label: 'Партнерам',
+                label: 'partners',
                 data: [
-                    { text: 'Франчайзинг', url: '#' },
-                    { text: 'Продавать на Розетке', url: '#' },
-                    { text: 'Сотрудничество с нами', url: '#' },
+                    { i18: 'franchising', url: '#' },
+                    { i18: 'sellOnRozetka', url: '#' },
+                    { i18: 'collaboration', url: '#' },
                 ],
             },
         ]
@@ -249,25 +254,25 @@ export default {
                 id: 0,
                 url: '#',
                 icon: 'laptop',
-                text: 'Ноутбуки и компьютеры',
+                i18: 'pc',
             },
             {
                 id: 1,
                 url: '#',
                 icon: 'smartphone',
-                text: 'Смартфоны, ТВ и Электроника',
+                i18: 'smartphone',
             },
             {
                 id: 2,
                 url: '#',
                 icon: 'sports_esports',
-                text: 'Товары для геймеров',
+                i18: 'gamers',
             },
             {
                 id: 3,
                 url: '#',
                 icon: 'more_horiz',
-                text: 'etc...',
+                i18: 'etc',
             },
         ]
         const socialLinks = [
@@ -303,6 +308,7 @@ export default {
             },
         ]
         return {
+            t,
             user,
             menuLinks,
             socialLinks,
@@ -335,3 +341,85 @@ export default {
 .q-card .q-card__section:nth-child(n+4)
     padding-top 0 !important
 </style>
+<i18n lang="yaml">
+ru:
+    mainMenu:
+        pc: 'Ноутбуки и компьютеры'
+        smartphone: 'Смартфоны, ТВ и Электроника'
+        gamers: 'Товары для геймеров'
+        etc: 'etc'
+        help: 'Справочный центр'
+    user:
+        welcome: 'Добро пожаловать!'
+        description: 'Войдите, чтобы получать рекомендации, персональные бонусы и скидки.'
+        button: 'Войдите в личный кабинет'
+        logout: 'Выход'
+    apps: 'Устанавливайте наши приложения'
+    socialLinks: 'Мы в социальных сетях'
+    socialMenu:
+        help: 'Помощь'
+        delivery: 'Доставка и оплата'
+        credit: 'Кредит'
+        warranty: 'Гарантия'
+        return: 'Возврат товара'
+        serviceCenter: 'Сервисные центры'
+        trackOrder: 'Отследить заказ'
+        info: 'Информация о компании'
+        about: 'О нас'
+        terms: 'Условия использования сайта'
+        jobs: 'Вакансии'
+        contacts: 'Контакты'
+        services: 'Сервисы'
+        bonusAccount: 'Бонусный счет'
+        premium: 'Rozetka Premium'
+        gifts: 'Подарочные сертификаты'
+        exchange: 'Rozetka Обмен'
+        travel: 'Rozetka Travel'
+        partners: 'Партнерам'
+        franchising: 'Франчайзинг'
+        sellOnRozetka: 'Продавать на Розетке'
+        collaboration: 'Сотрудничество с нами'
+    footer:
+        license: 'ТМ используется на основании лицензии правообладателя RozetkaLTD.'
+        copyright: '© Интернет-магазин «Розетка™»'
+ua:
+    mainMenu:
+        pc: 'Ноутбуки та комп’ютери'
+        smartphone: 'Смартфони, ТВ і електроніка'
+        gamers: 'Товари для геймерів'
+        etc: 'etc'
+        help: 'Довідковий центр'
+    user:
+        welcome: 'Ласкаво просимо!'
+        description: 'Увійдіть, щоб отримувати рекомендації, персональні бонуси і знижки.'
+        button: 'Увійдіть в особистий кабінет'
+        logout: 'Вихід'
+    apps: 'Встановлюйте наші додатки'
+    socialLinks: 'Ми в соціальних мережах'
+    socialMenu:
+        help: 'Допомога'
+        delivery: 'Доставка та оплата'
+        credit: 'Кредит'
+        warranty: 'Гарантія'
+        return: 'Повернення товару'
+        serviceCenter: 'Сервісні центри'
+        trackOrder: 'Відстежити замовлення'
+        info: 'Інформація про компанію'
+        about: 'Про нас'
+        terms: 'Умови використання сайту'
+        jobs: 'Вакансії'
+        contacts: 'Контакти'
+        services: 'Сервіси'
+        bonusAccount: 'Бонусний рахунок'
+        premium: 'Rozetka Premium'
+        gifts: 'Подарункові сертифікати'
+        exchange: 'Rozetka Обмін'
+        travel: 'Rozetka Travel'
+        partners: 'Партнерам'
+        franchising: 'Франчайзинг'
+        sellOnRozetka: 'Продавати на Розетці'
+        collaboration: 'Співпраця з нами'
+    footer:
+        license: 'ТМ використовується на підставі ліцензії правовласника RozetkaLTD.'
+        copyright: '© Інтернет-магазин «Розетка™»'
+</i18n>
