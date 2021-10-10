@@ -177,152 +177,136 @@
     </aside>
 </template>
 
-<script>
-import SvgIcon from '../components/SvgIcon'
-import { inject, reactive, ref } from 'vue'
+<script setup lang="ts">
+import SvgIcon from '../components/SvgIcon.vue'
+import { reactive, ref } from 'vue'
 import { logout, setLoginState, setToken, setUserData } from '../global'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
+import { injectStrict } from '../ts/utils'
+import { UserKey } from '../ts/symbols'
 
-export default {
-    components: { SvgIcon },
-    setup() {
-        const user = inject('user'),
-            result = ref(null),
-            isAuthDialogOpened = ref(false),
-            authForm = reactive({
-                isLogin: true,
-                login: '',
-                password: '',
-                email: '',
-            }),
-            { t } = useI18n()
-        function onSubmit() {
-            const url = authForm.isLogin ? '/api/auth/login' : '/api/auth/register'
-            axios.post(url, { name: authForm.login, password: authForm.password, email: authForm.email }).then((response) => {
-                setUserData(response.data.userData)
-                setLoginState(response.data.access_token)
-                setToken(response.data.access_token, response.data.expires_in)
-                setTimeout(() => (isAuthDialogOpened.value = false), 100)
-            })
-        }
-        function onLogout() {
-            logout()
-        }
-        const supportLinks = [
-            {
-                label: 'help',
-                data: [
-                    { i18: 'delivery', url: '#' },
-                    { i18: 'credit', url: '#' },
-                    { i18: 'warranty', url: '#' },
-                    { i18: 'return', url: '#' },
-                    { i18: 'serviceCenter', url: '#' },
-                    { i18: 'trackOrder', url: '#' },
-                ],
-            },
-            {
-                label: 'info',
-                data: [
-                    { i18: 'about', url: '#' },
-                    { i18: 'terms', url: '#' },
-                    { i18: 'jobs', url: '#' },
-                    { i18: 'contacts', url: '#' },
-                ],
-            },
-            {
-                label: 'services',
-                data: [
-                    { i18: 'bonusAccount', url: '#' },
-                    { i18: 'premium', url: '#' },
-                    { i18: 'gifts', url: '#' },
-                    { i18: 'exchange', url: '#' },
-                    { i18: 'travel', url: '#' },
-                ],
-            },
-            {
-                label: 'partners',
-                data: [
-                    { i18: 'franchising', url: '#' },
-                    { i18: 'sellOnRozetka', url: '#' },
-                    { i18: 'collaboration', url: '#' },
-                ],
-            },
-        ]
-        const menuLinks = [
-            {
-                id: 0,
-                url: '#',
-                icon: 'laptop',
-                i18: 'pc',
-            },
-            {
-                id: 1,
-                url: '#',
-                icon: 'smartphone',
-                i18: 'smartphone',
-            },
-            {
-                id: 2,
-                url: '#',
-                icon: 'sports_esports',
-                i18: 'gamers',
-            },
-            {
-                id: 3,
-                url: '#',
-                icon: 'more_horiz',
-                i18: 'etc',
-            },
-        ]
-        const socialLinks = [
-            {
-                iconId: '#icon-facebook',
-                link: '#',
-                style: 'background-color: #506098',
-            },
-            {
-                iconId: '#icon-twitter',
-                link: '#',
-                style: 'background-color: #76c9fd',
-            },
-            {
-                iconId: '#icon-youtube',
-                link: '#',
-                style: 'background-color: #e90000',
-            },
-            {
-                iconId: '#icon-instagram',
-                link: '#',
-                style: 'background: linear-gradient(45deg, #ffb700 14.65%, #ff6800 31.68%, #cb217d 54.72%, #7e00aa 85.35%)',
-            },
-            {
-                iconId: '#icon-viber',
-                link: '#',
-                style: 'background-color: #7d3daf',
-            },
-            {
-                iconId: '#icon-telegram',
-                link: '#',
-                style: 'background-color: #08c',
-            },
-        ]
-        return {
-            t,
-            user,
-            menuLinks,
-            socialLinks,
-            supportLinks,
-            authForm,
-            result,
-            isAuthDialogOpened,
-            onSubmit,
-            onLogout,
-            masterCard: ref(false),
-            visa: ref(false),
-        }
-    },
+const masterCard = ref(false),
+    visa = ref(false),
+    user = injectStrict(UserKey),
+    isAuthDialogOpened = ref(false),
+    authForm = reactive({
+        isLogin: true,
+        login: '',
+        password: '',
+        email: '',
+    }),
+    { t } = useI18n()
+function onSubmit() {
+    const url = authForm.isLogin ? '/api/auth/login' : '/api/auth/register'
+    axios.post(url, { name: authForm.login, password: authForm.password, email: authForm.email }).then((response) => {
+        setUserData(response.data.userData)
+        setLoginState(response.data.access_token)
+        setToken(response.data.access_token, response.data.expires_in)
+        setTimeout(() => (isAuthDialogOpened.value = false), 100)
+    })
 }
+function onLogout() {
+    logout()
+}
+const supportLinks = [
+    {
+        label: 'help',
+        data: [
+            { i18: 'delivery', url: '#' },
+            { i18: 'credit', url: '#' },
+            { i18: 'warranty', url: '#' },
+            { i18: 'return', url: '#' },
+            { i18: 'serviceCenter', url: '#' },
+            { i18: 'trackOrder', url: '#' },
+        ],
+    },
+    {
+        label: 'info',
+        data: [
+            { i18: 'about', url: '#' },
+            { i18: 'terms', url: '#' },
+            { i18: 'jobs', url: '#' },
+            { i18: 'contacts', url: '#' },
+        ],
+    },
+    {
+        label: 'services',
+        data: [
+            { i18: 'bonusAccount', url: '#' },
+            { i18: 'premium', url: '#' },
+            { i18: 'gifts', url: '#' },
+            { i18: 'exchange', url: '#' },
+            { i18: 'travel', url: '#' },
+        ],
+    },
+    {
+        label: 'partners',
+        data: [
+            { i18: 'franchising', url: '#' },
+            { i18: 'sellOnRozetka', url: '#' },
+            { i18: 'collaboration', url: '#' },
+        ],
+    },
+]
+const menuLinks = [
+    {
+        id: 0,
+        url: '#',
+        icon: 'laptop',
+        i18: 'pc',
+    },
+    {
+        id: 1,
+        url: '#',
+        icon: 'smartphone',
+        i18: 'smartphone',
+    },
+    {
+        id: 2,
+        url: '#',
+        icon: 'sports_esports',
+        i18: 'gamers',
+    },
+    {
+        id: 3,
+        url: '#',
+        icon: 'more_horiz',
+        i18: 'etc',
+    },
+]
+const socialLinks = [
+    {
+        iconId: '#icon-facebook',
+        link: '#',
+        style: 'background-color: #506098',
+    },
+    {
+        iconId: '#icon-twitter',
+        link: '#',
+        style: 'background-color: #76c9fd',
+    },
+    {
+        iconId: '#icon-youtube',
+        link: '#',
+        style: 'background-color: #e90000',
+    },
+    {
+        iconId: '#icon-instagram',
+        link: '#',
+        style: 'background: linear-gradient(45deg, #ffb700 14.65%, #ff6800 31.68%, #cb217d 54.72%, #7e00aa 85.35%)',
+    },
+    {
+        iconId: '#icon-viber',
+        link: '#',
+        style: 'background-color: #7d3daf',
+    },
+    {
+        iconId: '#icon-telegram',
+        link: '#',
+        style: 'background-color: #08c',
+    },
+]
 </script>
 
 <style scoped lang="stylus">

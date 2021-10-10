@@ -101,85 +101,63 @@
     </q-dialog>
 </template>
 
-<script>
-import AppContentSidebar from './AppContentSidebar'
+<script setup lang="ts">
+import AppContentSidebar from './AppContentSidebar.vue'
 import { ref, computed, reactive } from 'vue'
-import Product from '../components/Product'
+import Product from '../components/Product.vue'
 import { useI18n } from 'vue-i18n'
-export default {
-    name: 'AppContent',
-    components: { Product, AppContentSidebar },
-    setup() {
-        const form = reactive({
-            titleRU: '',
-            titleUA: '',
-            logoURL: '',
-            price: 0,
-            favorite: false,
-            endings: false,
-            discountFrom: 0,
-        })
-        const autoplay = ref(true),
-            isAddDialogOpened = ref(false),
-            productMaxColumns = ref(null),
-            { t, locale } = useI18n(),
-            slides = [
-                {
-                    id: 0,
-                    url: '#',
-                },
-                {
-                    id: 1,
-                    url: '#',
-                },
-                {
-                    id: 2,
-                    url: '#',
-                },
-            ],
-            slideID = ref(slides[0].id)
-        const productList = ref([
-            {
-                titleRU: 'Отладочная плата Arduino Nano',
-                titleUA: 'Відладочна плата Arduino Nano',
-                logoURL: '/img/product1.jpg',
-                price: 202,
-                favorite: true,
-                endings: true,
-                discountFrom: 305,
-            },
-        ])
-        const displayedProductMultiplier = ref(1)
-        const displayedProductList = computed(() => productList.value.slice(0, productMaxColumns.value * displayedProductMultiplier.value))
-        const productWidth = computed(() => 100 / productMaxColumns.value + '%')
-        function onResize(size) {
-            productMaxColumns.value = Math.floor(size.width / 169)
-        }
-        function openPageURL(page) {
-            window.open(page, '_self')
-        }
-        function onProductAdd() {
-            productList.value.push(form)
-        }
-        return {
-            promotionsCount: 894,
-            openPageURL,
-            onProductAdd,
-            onResize,
-            displayedProductList,
-            displayedProductMultiplier,
-            productMaxColumns,
-            productList,
-            productWidth,
-            form,
-            slideID,
-            slides,
-            locale,
-            autoplay,
-            isAddDialogOpened,
-            t,
-        }
+
+const form = reactive({
+    titleRU: '',
+    titleUA: '',
+    logoURL: '',
+    price: 0,
+    favorite: false,
+    endings: false,
+    discountFrom: 0,
+})
+const autoplay = ref(true),
+    isAddDialogOpened = ref(false),
+    productMaxColumns = ref(0),
+    { t, locale } = useI18n(),
+    slides = [
+        {
+            id: 0,
+            url: '#',
+        },
+        {
+            id: 1,
+            url: '#',
+        },
+        {
+            id: 2,
+            url: '#',
+        },
+    ],
+    slideID = ref(slides[0].id),
+    promotionsCount = 894
+const productList = ref([
+    {
+        titleRU: 'Отладочная плата Arduino Nano',
+        titleUA: 'Відладочна плата Arduino Nano',
+        logoURL: '/img/product1.jpg',
+        price: 202,
+        favorite: true,
+        endings: true,
+        discountFrom: 305,
     },
+])
+const displayedProductMultiplier = ref(1)
+const displayedProductList = computed(() => productList.value.slice(0, productMaxColumns.value * displayedProductMultiplier.value))
+const productWidth = computed(() => 100 / productMaxColumns.value + '%')
+function onResize(size: { width: number; height: number }) {
+    productMaxColumns.value = Math.floor(size.width / 169)
+}
+function openPageURL(page: string) {
+    window.open(page, '_self')
+}
+function onProductAdd() {
+    productList.value.push(form)
 }
 </script>
 
