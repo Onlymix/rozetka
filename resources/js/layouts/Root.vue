@@ -15,40 +15,33 @@
     </q-layout>
     <svg-package />
 </template>
-<script>
-import { ref, onMounted, inject } from 'vue'
-import AppHeader from './AppHeader'
-import AppContent from './AppContent'
-import SvgPackage from '../components/SvgPackage'
-import Sidebar from './Sidebar'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import AppHeader from './AppHeader.vue'
+import AppContent from './AppContent.vue'
+import SvgPackage from '../components/SvgPackage.vue'
+import Sidebar from './Sidebar.vue'
 import { logout, refreshToken, setLoginState, setSavedUserData } from '../global'
 import { useCookies } from '@vueuse/integrations/useCookies'
+import { injectStrict } from '../ts/utils'
+import { UserKey } from '../ts/symbols'
 
-export default {
-    name: 'Root',
-    components: { Sidebar, SvgPackage, AppHeader, AppContent },
-    setup() {
-        const user = inject('user')
-        const jwt = useCookies().get('JWT')
-        if (jwt) {
-            setLoginState(jwt)
-            const localToken = localStorage.getItem('tokenExpirationTime')
-            if (localToken) {
-                user.tokenExpirationTime = localToken
-                setSavedUserData()
-                if ((user.tokenExpirationTime - Date.now()) / 60000 < 30) refreshToken()
-            }
-        } else logout(true)
-        onMounted(() => {
-            // check user token exist and then if their time lower then 30 exec refresh token func
-            setInterval(() => {
-                if (user.tokenExpirationTime && (user.tokenExpirationTime - Date.now()) / 60000 < 30) refreshToken()
-            }, 60000)
-        })
-        return {
-            leftDrawerOpen: ref(false),
-            user,
-        }
-    },
-}
+const user = injectStrict(UserKey),
+    jwt = useCookies().get('JWT'),
+    leftDrawerOpen = ref(false)
+if (jwt) {
+    setLoginState(jwt)
+    const localToken = localStorage.getItem('tokenExpirationTime')
+    if (localToken) {
+        user.tokenExpirationTime = Number(localToken)
+        setSavedUserData()
+        if ((user.tokenExpirationTime - Date.now()) / 60000 < 30) refreshToken()
+    }
+} else logout(true)
+onMounted(() => {
+    // check user token exist and then if their time lower then 30 exec refresh token func
+    setInterval(() => {
+        if (user.tokenExpirationTime && (user.tokenExpirationTime - Date.now()) / 60000 < 30) refreshToken()
+    }, 60000)
+})
 </script>

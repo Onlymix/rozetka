@@ -4,10 +4,12 @@
         "node": true
     },
     "extends": [
+        "@vue/typescript",
         "plugin:vue/recommended",
         "plugin:prettier/recommended",
         "plugin:vue-scoped-css/vue3-recommended",
-        "@vue/prettier"
+        "@vue/prettier",
+        "@vue/prettier/@typescript-eslint"
     ],
     "rules": {
         "vue-scoped-css/no-unused-selector": 0,
@@ -33,6 +35,7 @@
         ]
     },
     "parserOptions": {
+        "parser": "@typescript-eslint/parser",
         "sourceType": "module",
         "ecmaVersion": 2020
     }

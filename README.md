@@ -3,12 +3,14 @@ Used frameworks and main libraries
 - [Laravel framework](https://laravel.com).
 - [VueJS 3](https://v3.vuejs.org/).
 - [Quasar](https://quasar.dev/).
+- [TypeScript](https://www.typescriptlang.org/).
 ***
 ## Interesting
-- All done on latest libs
 - JWT auth
     - registration and login
 - Multiple site language in reactive mode i18n
+- TypeScript source code
+- All done on latest libs
 ***
 ## Live version
 - [darkdev](http://darkdev.in)

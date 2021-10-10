@@ -1,7 +1,14 @@
-import { reactive } from 'vue'
 import { useCookies } from '@vueuse/integrations/useCookies'
 import axios from 'axios'
+import { ExternalUserData, User } from './ts/types'
+import { reactive } from 'vue'
 
+export const user = reactive<User>({
+    isLoggedIn: false,
+    login: '',
+    email: '',
+    tokenExpirationTime: 0,
+})
 function removeUserData() {
     user.isLoggedIn = false
     user.login = ''
@@ -12,31 +19,28 @@ function removeUserData() {
     localStorage.removeItem('tokenExpirationTime')
     useCookies().remove('JWT')
 }
-export const user = reactive({
-    isLoggedIn: false,
-    login: '',
-    email: '',
-    tokenExpirationTime: 0,
-})
-export function setLoginState(token) {
+
+export function setLoginState(token: string) {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
     user.isLoggedIn = true
 }
-export function setUserData(data) {
+export function setUserData(data: ExternalUserData) {
     user.login = data.name
     user.email = data.email
     localStorage.setItem('login', data.name)
     localStorage.setItem('email', data.email)
 }
 export function setSavedUserData() {
-    user.login = localStorage.getItem('login')
-    user.email = localStorage.getItem('email')
+    const login = localStorage.getItem('login'),
+        email = localStorage.getItem('email')
+    user.login = login ? login : 'noneStored'
+    user.email = email ? email : 'noneStored'
 }
-export function logout(withoutRequest) {
+export function logout(withoutRequest?: boolean) {
     if (withoutRequest) removeUserData()
     else axios.get('/api/auth/logout').then(() => removeUserData())
 }
-export function setToken(token, expires) {
+export function setToken(token: string, expires: number) {
     const date = new Date()
     date.setSeconds(date.getSeconds() + expires)
     useCookies().set('JWT', token, { expires: date })
