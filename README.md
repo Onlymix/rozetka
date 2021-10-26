@@ -6,6 +6,7 @@ Used frameworks and main libraries
 - [TypeScript](https://www.typescriptlang.org/).
 ***
 ## Interesting
+- Adaptive design
 - JWT auth
     - registration and login
 - Multiple site language in reactive mode i18n
@@ -23,7 +24,7 @@ Used frameworks and main libraries
 - generate jwt auth keys _(env file)_
 - configure .env file _(your local db pass and login)_
 - migrate basic user db
-- compile source code in dev prod or watch mode
+- compile source code in `development`/`production`/`watch` mode
 - if you want to use livereload in watch mode set up MIX_APP_DEV_URL variable with your local webserver address _(env file)_
 
 ```sh
@@ -34,7 +35,7 @@ php artisan key:generate
 php artisan jwt:secret
 # configure .env db username and password
 php artisan migrate
-yarn run dev # npm run dev
+yarn run development # npm run dev
 ```
 ***
 ### Contacts

@@ -1,5 +1,4 @@
 const mix = require('laravel-mix')
-const path = require('path')
 require('laravel-mix-eslint')
 const fs = require('fs')
 /*
