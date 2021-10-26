@@ -1,5 +1,5 @@
 <template>
-    <svg aria-hidden="true" :width="w" :height="h">
+    <svg aria-hidden="true" :width="w" :height="h" :viewBox="viewBox">
         <use :href="'#' + iconId" />
     </svg>
 </template>
@@ -14,12 +14,17 @@ export default {
         w: {
             type: String,
             required: false,
-            default: 'auto',
+            default: null,
         },
         h: {
             type: String,
             required: false,
-            default: 'auto',
+            default: null,
+        },
+        viewBox: {
+            type: String,
+            required: false,
+            default: null,
         },
     },
 }

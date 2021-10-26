@@ -25,7 +25,9 @@ import { logout, refreshToken, setLoginState, setSavedUserData } from '../global
 import { useCookies } from '@vueuse/integrations/useCookies'
 import { injectStrict } from '../ts/utils'
 import { UserKey } from '../ts/symbols'
+import { Screen } from 'quasar'
 
+Screen.setSizes({ sm: 768, md: 1024, lg: 1400, xl: 1600 })
 const user = injectStrict(UserKey),
     jwt = useCookies().get('JWT'),
     leftDrawerOpen = ref(false)
@@ -45,3 +47,8 @@ onMounted(() => {
     }, 60000)
 })
 </script>
+<style>
+#app {
+    min-width: 320px;
+}
+</style>

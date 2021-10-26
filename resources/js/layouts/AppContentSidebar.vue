@@ -48,8 +48,8 @@
         <div class="sidebar-padding row q-gutter-sm items-center">
             <div class="text-grey-6 col-12" v-text="t('socialLinks')" />
             <q-btn
-                v-for="item in socialLinks"
-                :key="item.iconId"
+                v-for="(item, index) in socialLinks"
+                :key="index"
                 round
                 unelevated
                 :icon="'svguse:' + item.iconId"
@@ -65,8 +65,8 @@
             <template v-for="item in supportLinks" :key="item.label">
                 <q-item-label header class="q-px-lg q-pt-lg q-pb-sm text-subtitle2" v-text="t(`socialMenu.${item.label}`)" />
                 <q-item
-                    v-for="button in item.data"
-                    :key="button.text"
+                    v-for="(button, index) in item.data"
+                    :key="index"
                     style="padding: 0 24px 0 24px; min-height: 26px"
                     dense
                     clickable

@@ -1,29 +1,46 @@
 <template>
-    <div class="header-wrapper items-center row q-gutter-x-md q-mx-auto">
+    <div class="header-wrapper q-mx-auto">
         <q-btn icon="menu" unelevated :ripple="false" size="lg" dense @click="sidebarIsOpened = !sidebarIsOpened" />
-        <a href="#" class="reset-line-height"><svg-icon icon-id="icon-logo-Main" w="240px" h="40px" /></a>
-        <q-btn icon="widgets" :label="t('catalog')" unelevated :ripple="false" no-caps style="background-color: hsla(0, 0%, 100%, 0.2)" />
-        <q-input v-model="search" outlined dense class="search col-grow" :placeholder="t('searchPlaceholder')">
-            <template #prepend>
+        <a href="#" class="h-logo">
+            <svg-icon
+                :icon-id="$q.screen.width > 1280 ? 'icon-logo-Main' : 'icon-logo-Main-small'"
+                :w="$q.screen.width > 1280 ? '240px' : '40px'"
+                h="40px"
+            />
+        </a>
+        <q-btn
+            class="h-catalog"
+            icon="widgets"
+            :label="t('catalog')"
+            unelevated
+            :ripple="false"
+            no-caps
+            style="background-color: hsla(0, 0%, 100%, 0.2)"
+        />
+        <q-input v-model="search" outlined dense class="h-search" :placeholder="$q.screen.lt.md">
+            <!--        <q-input v-model="search" outlined dense class="search col-grow" :placeholder="t('searchPlaceholder')">-->
+            <template v-if="!$q.screen.lt.sm" #prepend>
                 <q-icon name="search" />
             </template>
             <template #append>
                 <q-icon v-if="search !== ''" name="close" class="cursor-pointer" @click="search = ''" />
-                <q-separator vertical inset class="q-mx-sm" />
-                <q-btn icon="mic" size="sm" dense unelevated :ripple="false" />
+                <template v-if="!$q.screen.lt.sm">
+                    <q-separator vertical inset class="q-mx-sm" />
+                    <q-btn icon="mic" size="sm" dense unelevated :ripple="false" />
+                </template>
             </template>
-            <template #after>
+            <template v-if="!$q.screen.lt.sm" #after>
                 <q-btn :label="t('searchButton')" unelevated color="green" no-caps style="border-radius: 0 3px 3px 0; height: 100%" />
             </template>
         </q-input>
-        <lang-bar />
-        <q-btn dense unelevated :ripple="false" class="reset-line-height" no-caps padding="2px" size="10px">
+        <lang-bar class="h-lang" />
+        <q-btn dense unelevated :ripple="false" class="reset-line-height h-premium" no-caps padding="2px" size="10px">
             <div>
                 <p class="q-my-xs">{{ t('premium') }}</p>
                 <svg-icon icon-id="icon-premium" w="66px" h="20px" />
             </div>
         </q-btn>
-        <q-btn icon="person" unelevated :ripple="false" size="lg" dense />
+        <q-btn class="h-person" icon="person" unelevated :ripple="false" size="lg" dense />
         <q-btn icon="shopping_cart" unelevated :ripple="false" size="lg" dense />
     </div>
 </template>
@@ -56,19 +73,49 @@ export default {
 </script>
 <style lang="stylus">
 .header-wrapper
+    display: grid;
+    grid-template-columns: repeat(3, auto) 1fr repeat(4, auto);
+    grid-template-areas: ". logo catalog search lang premium person ."
+    align-items center
+    grid-gap 1rem
     height 72px
-    min-width 1090px
     max-width 1600px
-    background-color inherit
-    .search
+    .h-logo
+        grid-area logo
+    .h-catalog
+        grid-area catalog
+    .h-search
+        grid-area search
         .q-field__control
             background-color #fff
             border-radius 3px 0 0 3px
             &:after,
             &:before
                 border none !important
+            @media (max-width 768px)
+                border-radius 3px
         .q-field__after
             padding 0
+    .h-lang
+        grid-area lang
+    .h-premium
+        grid-area premium
+    .h-person
+        grid-area person
+    @media only screen and (min-width: 768px) and (max-width: 1024px)
+        grid-template-areas: ". logo search search search search person ."
+        .h-catalog,
+        .h-lang,
+        .h-premium
+            display none
+    @media only screen and (max-width 767px)
+        grid-template-areas: ". search search search search search search ."
+        .h-catalog,
+        .h-lang,
+        .h-premium,
+        .h-logo,
+        .h-person
+            display none
 </style>
 <i18n lang="yaml">
 ru:

@@ -1,31 +1,38 @@
 <template>
-    <main class="q-px-lg">
-        <app-content-sidebar />
-        <q-separator vertical color="grey-12" />
-        <section class="q-mt-lg q-ml-lg column">
-            <q-carousel
-                v-model="slideID"
-                class="full-width"
-                animated
-                infinite
-                :autoplay="autoplay"
-                arrows
-                control-color="primary"
-                transition-prev="slide-right"
-                transition-next="slide-left"
-                @mouseenter="autoplay = false"
-                @mouseleave="autoplay = true"
+    <main class="q-mx-auto row">
+        <app-content-sidebar class="gt-sm sidebar" />
+        <section class="q-mt-lt column col items-start justify-start" :class="{ 'q-ml-lg': $q.screen.gt.sm }">
+            <q-responsive :ratio="3" class="full-width">
+                <q-carousel
+                    v-model="slideID"
+                    animated
+                    infinite
+                    :autoplay="true"
+                    arrows
+                    control-color="primary"
+                    transition-prev="slide-right"
+                    transition-next="slide-left"
+                    @mouseenter="autoplay = false"
+                    @mouseleave="autoplay = true"
+                >
+                    <q-carousel-slide
+                        v-for="item in slides"
+                        :key="item.id"
+                        :name="item.id"
+                        :img-src="`/img/slider/${locale}/${item.id}.jpg`"
+                        class="cursor-pointer"
+                        @click="openPageURL(item.url)"
+                    />
+                </q-carousel>
+            </q-responsive>
+            <q-btn
+                unelevated
+                no-caps
+                :ripple="false"
+                class="content__button q-btn-no-hover-bg self-end"
+                padding="xs xl"
+                :class="{ hidden: $q.screen.lt.sm }"
             >
-                <q-carousel-slide
-                    v-for="item in slides"
-                    :key="item.id"
-                    :name="item.id"
-                    :img-src="`/img/slider/${locale}/${item.id}.jpg`"
-                    class="cursor-pointer"
-                    @click="openPageURL(item.url)"
-                />
-            </q-carousel>
-            <q-btn unelevated no-caps :ripple="false" class="content__button q-btn-no-hover-bg self-end" padding="xs xl">
                 <span class="q-mr-xs">{{ t('totalPromotions') }} </span>
                 <span class="q-pl-xs text-grey-6" v-text="promotionsCount" />
             </q-btn>
@@ -33,7 +40,7 @@
                 {{ t('goodsCategory') }}
                 <q-btn label="Add product (test button)" dense unelevated outline @click="isAddDialogOpened = !isAddDialogOpened" />
             </p>
-            <div class="flex wrap content-start">
+            <div class="flex wrap content-start full-width">
                 <product
                     v-for="(product, index) in displayedProductList"
                     :key="index"
@@ -107,6 +114,7 @@ import { ref, computed, reactive } from 'vue'
 import Product from '../components/Product.vue'
 import { useI18n } from 'vue-i18n'
 
+/* form data to add product */
 const form = reactive({
     titleRU: '',
     titleUA: '',
@@ -116,26 +124,29 @@ const form = reactive({
     endings: false,
     discountFrom: 0,
 })
-const autoplay = ref(true),
-    isAddDialogOpened = ref(false),
-    productMaxColumns = ref(0),
-    { t, locale } = useI18n(),
-    slides = [
-        {
-            id: 0,
-            url: '#',
-        },
-        {
-            id: 1,
-            url: '#',
-        },
-        {
-            id: 2,
-            url: '#',
-        },
-    ],
-    slideID = ref(slides[0].id),
-    promotionsCount = 894
+const { t, locale } = useI18n()
+/* show menu add products */
+const isAddDialogOpened = ref(false)
+/* max displayed count */
+const productMaxColumns = ref(0)
+/* promotion slides (simulation retrieved from db) */
+const slides = [
+    {
+        id: 0,
+        url: '#',
+    },
+    {
+        id: 1,
+        url: '#',
+    },
+    {
+        id: 2,
+        url: '#',
+    },
+]
+/* amount of promotion (simulation retrieved from db) */
+const promotionsCount = 894
+/* total products list (simulation retrieved from db) */
 const productList = ref([
     {
         titleRU: 'Отладочная плата Arduino Nano',
@@ -147,11 +158,17 @@ const productList = ref([
         discountFrom: 305,
     },
 ])
+/* current displayed slide */
+const slideID = ref(slides[0].id)
+/* displayed product rows multiplier */
 const displayedProductMultiplier = ref(1)
+
+/* computed displayed products */
 const displayedProductList = computed(() => productList.value.slice(0, productMaxColumns.value * displayedProductMultiplier.value))
 const productWidth = computed(() => 100 / productMaxColumns.value + '%')
+
 function onResize(size: { width: number; height: number }) {
-    productMaxColumns.value = Math.floor(size.width / 169)
+    productMaxColumns.value = Math.floor(size.width / 160)
 }
 function openPageURL(page: string) {
     window.open(page, '_self')
@@ -163,10 +180,12 @@ function onProductAdd() {
 
 <style lang="stylus">
 main
-    display grid
-    grid-template-columns 300px 1px minmax(741px, 1251px)
-    justify-content center
-    min-width min-content
+    max-width 1600px
+    .sidebar
+        border-color #EEEEEE
+        border-width 0 1px 0 0
+        border-style solid
+        width 300px
     .content__button
         border-radius 0 0 3px 3px !important
         border 1px solid #e0e0e0
@@ -176,6 +195,10 @@ main
             color $app__text-hover
     .no-left-border
         border-left-width 0 !important
+    @media only screen and (min-width 768px) and (max-width 1024px)
+        padding 0 8px 0 8px
+    @media only screen and (min-width 1024px)
+        padding 0 24px 0 24px
 </style>
 <i18n lang="yaml">
 ru:
