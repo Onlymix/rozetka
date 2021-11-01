@@ -17,8 +17,7 @@
             no-caps
             style="background-color: hsla(0, 0%, 100%, 0.2)"
         />
-        <q-input v-model="search" outlined dense class="h-search" :placeholder="$q.screen.lt.md">
-            <!--        <q-input v-model="search" outlined dense class="search col-grow" :placeholder="t('searchPlaceholder')">-->
+        <q-input v-model="search" outlined dense class="h-search" :placeholder="t('searchPlaceholder')">
             <template v-if="!$q.screen.lt.sm" #prepend>
                 <q-icon name="search" />
             </template>
